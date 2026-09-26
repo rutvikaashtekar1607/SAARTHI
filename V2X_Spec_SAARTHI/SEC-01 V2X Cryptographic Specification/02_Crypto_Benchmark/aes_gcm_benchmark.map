@@ -1,0 +1,153 @@
+Archive member included to satisfy reference by file (symbol)
+
+.\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(gcm.c.obj)
+                              .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\aes_gcm_benchmark.o (mbedtls_gcm_init)
+.\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(platform_util.c.obj)
+                              .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(gcm.c.obj) (mbedtls_platform_zeroize)
+.\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(block_cipher.c.obj)
+                              .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(gcm.c.obj) (mbedtls_block_cipher_free)
+.\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(constant_time.c.obj)
+                              .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(gcm.c.obj) (mbedtls_ct_memcmp)
+.\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(aes.c.obj)
+                              .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(block_cipher.c.obj) (mbedtls_aes_init)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x08000000         0x00040000         xr
+RAM              0x20000000         0x00010000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\platform\startup.o
+LOAD .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\aes_gcm_benchmark.o
+LOAD .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a
+
+.isr_vector     0x08000000        0x8
+ *(.isr_vector)
+ .isr_vector    0x08000000        0x8 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\platform\startup.o
+                0x08000000                vector_table
+
+.text           0x08000008     0x3614
+ *(.text*)
+ .text          0x08000008      0x164 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\platform\startup.o
+                0x08000008                memset
+                0x0800003c                memcpy
+                0x08000078                memmove
+                0x080000f6                free
+                0x08000108                Reset_Handler
+                0x08000164                Default_Handler
+ .text          0x0800016c      0x164 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\aes_gcm_benchmark.o
+                0x080001b8                main
+ .text          0x080002d0     0x189c .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(gcm.c.obj)
+                0x080002d0                mbedtls_gcm_init
+                0x080005e8                mbedtls_gcm_setkey
+                0x08000bde                mbedtls_gcm_starts
+                0x08000e9a                mbedtls_gcm_update_ad
+                0x080014dc                mbedtls_gcm_update
+                0x0800174a                mbedtls_gcm_finish
+                0x08001a36                mbedtls_gcm_crypt_and_tag
+                0x08001ac8                mbedtls_gcm_auth_decrypt
+                0x08001b40                mbedtls_gcm_free
+ .text          0x08001b6c       0x70 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(platform_util.c.obj)
+                0x08001b6c                mbedtls_platform_zeroize
+                0x08001bb4                mbedtls_zeroize_and_free
+ .text          0x08001bdc       0xf8 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(block_cipher.c.obj)
+                0x08001bdc                mbedtls_block_cipher_free
+                0x08001c10                mbedtls_block_cipher_setup
+                0x08001c6c                mbedtls_block_cipher_setkey
+                0x08001ca0                mbedtls_block_cipher_encrypt
+ .text          0x08001cd4      0x210 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(constant_time.c.obj)
+                0x08001d70                mbedtls_ct_memcmp
+                0x08001dd4                mbedtls_ct_memcpy_if
+                0x08001e9c                mbedtls_ct_memcpy_offset
+ .text          0x08001ee4     0x1718 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(aes.c.obj)
+                0x08002350                mbedtls_aes_init
+                0x0800236c                mbedtls_aes_free
+                0x080023a2                mbedtls_aes_setkey_enc
+                0x08002770                mbedtls_aes_setkey_dec
+                0x08002a08                mbedtls_internal_aes_encrypt
+                0x08002fb4                mbedtls_internal_aes_decrypt
+                0x080035b4                mbedtls_aes_crypt_ecb
+ *(.rodata*)
+ .rodata        0x080035fc       0x20 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(gcm.c.obj)
+
+.glue_7         0x0800361c        0x0
+ .glue_7        0x0800361c        0x0 linker stubs
+
+.glue_7t        0x0800361c        0x0
+ .glue_7t       0x0800361c        0x0 linker stubs
+
+.vfp11_veneer   0x0800361c        0x0
+ .vfp11_veneer  0x0800361c        0x0 linker stubs
+
+.v4_bx          0x0800361c        0x0
+ .v4_bx         0x0800361c        0x0 linker stubs
+
+.iplt           0x0800361c        0x0
+ .iplt          0x0800361c        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\platform\startup.o
+
+.rel.dyn        0x0800361c        0x0
+ .rel.iplt      0x0800361c        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\platform\startup.o
+
+.data           0x20000000        0x4 load address 0x0800361c
+                0x20000000                        _sdata = .
+ *(.data*)
+ .data          0x20000000        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\platform\startup.o
+ .data          0x20000000        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\aes_gcm_benchmark.o
+ .data          0x20000000        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(gcm.c.obj)
+ .data          0x20000000        0x4 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(platform_util.c.obj)
+ .data          0x20000004        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(block_cipher.c.obj)
+ .data          0x20000004        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(constant_time.c.obj)
+ .data          0x20000004        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(aes.c.obj)
+                0x20000004                        _edata = .
+                0x0800361c                        _sidata = LOADADDR (.data)
+
+.igot.plt       0x20000004        0x0 load address 0x08003620
+ .igot.plt      0x20000004        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\platform\startup.o
+
+.bss            0x20000004     0x2a64 load address 0x08003620
+                0x20000004                        _sbss = .
+ *(.bss*)
+ .bss           0x20000004        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\platform\startup.o
+ .bss           0x20000004      0x834 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\aes_gcm_benchmark.o
+                0x20000830                benchmark_cycles
+                0x20000834                benchmark_status
+ .bss           0x20000838        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(gcm.c.obj)
+ .bss           0x20000838        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(platform_util.c.obj)
+ .bss           0x20000838        0x0 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(block_cipher.c.obj)
+ .bss           0x20000838        0x4 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(constant_time.c.obj)
+                0x20000838                mbedtls_ct_zero
+ .bss           0x2000083c     0x222c .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(aes.c.obj)
+ *(COMMON)
+                0x20002a68                        _ebss = .
+OUTPUT(.\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\aes_gcm_benchmark.elf elf32-littlearm)
+LOAD linker stubs
+
+.comment        0x00000000       0x55
+ .comment       0x00000000       0x55 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\platform\startup.o
+                                 0x56 (size before relaxing)
+ .comment       0x00000055       0x56 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\aes_gcm_benchmark.o
+ .comment       0x00000055       0x56 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(gcm.c.obj)
+ .comment       0x00000055       0x56 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(platform_util.c.obj)
+ .comment       0x00000055       0x56 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(block_cipher.c.obj)
+ .comment       0x00000055       0x56 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(constant_time.c.obj)
+ .comment       0x00000055       0x56 .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(aes.c.obj)
+
+.ARM.attributes
+                0x00000000       0x2e
+ .ARM.attributes
+                0x00000000       0x2e .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\platform\startup.o
+ .ARM.attributes
+                0x0000002e       0x2e .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\aes_gcm_benchmark.o
+ .ARM.attributes
+                0x0000005c       0x2e .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(gcm.c.obj)
+ .ARM.attributes
+                0x0000008a       0x2e .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(platform_util.c.obj)
+ .ARM.attributes
+                0x000000b8       0x2e .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(block_cipher.c.obj)
+ .ARM.attributes
+                0x000000e6       0x2e .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(constant_time.c.obj)
+ .ARM.attributes
+                0x00000114       0x2e .\V2X_Spec_SAARTHI\SEC-01 V2X Cryptographic Specification\02_Crypto_Benchmark\mbedtls-3.6.7\mbedtls-3.6.7\build\library\libmbedcrypto.a(aes.c.obj)
