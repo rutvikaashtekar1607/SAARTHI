@@ -1,7 +1,7 @@
 # SAARTHI — SEC-01 Crypto Benchmark
 
 **Project:** SAARTHI
-**Organization:** EduRankAI *(project identity as used by the team; not a label stated in the official SAARTHI task-allocation PDF)*
+**Organization:** EduRankAI
 **Owner:** Rutvika Ashtekar
 **Role:** Cybersecurity Lead
 **Domain:** Cryptography & Threat Analysis
