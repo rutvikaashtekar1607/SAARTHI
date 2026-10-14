@@ -499,8 +499,60 @@ Energy consumption was not measured during the completed benchmark runs.
 Therefore, no measured energy value is reported and no feasibility conclusion based on energy consumption is made.
 
 No unsupported performance measurement is presented as a confirmed result.
-
 ---
+
+## 12A. Trust Boundaries and Threat Assumptions v1.1 (Phase 2)
+
+This section extends Section 4 with component-level trust boundaries, explicit threat assumptions, and new threats found during Phase 2. It does not change the earlier threat IDs. Prepared by Rutvika Ashtekar for joint review with K. Mohan Krishna (hardware security, HSM); review status is in Section 12A.5. **ARU** means Autonomous Roadside Unit, as used in the Phase 2 task allocation.
+
+### 12A.1 Component-Level Trust Boundaries
+
+| ID | Boundary | Crosses | Trust Level | Owner |
+|----|----------|---------|-------------|-------|
+| TB-04 | Sensors → ARU MCU | Sensor readings enter the MCU | Semi-trusted: sensors may fail or be spoofed | Sensor interface owner (to be confirmed) |
+| TB-05 | ARU MCU → HSM (SPI / I2C / CAN) | Commands, nonces, key handles, register accesses | Trusted endpoints, **untrusted bus** | Mohan |
+| TB-06 | ARU → V2X radio / air interface | Encrypted telemetry over the air | **Untrusted**: attacker can eavesdrop, inject, replay, jam | Rutvika |
+| TB-07 | ARU → Command Centre | Telemetry, status and commands | Authenticated link assumed (see A-08) | Rutvika / Deepayan |
+
+TB-06 refines TB-01 and TB-03 from Section 4.
+
+### 12A.2 Threat Assumptions
+
+| ID | Assumption | Owner | How to validate | Status |
+|----|-----------|-------|-----------------|--------|
+| A-01 | A nonce is never reused under the same AES-GCM key | Rutvika / Mohan | Nonce-counter test in the HSM FSM, including a reboot and power-loss case | Open |
+| A-02 | The HSM register map is write-protected after lock | Mohan | SVA assertions and fault-injection testbench | Open |
+| A-03 | The RNG / entropy source is validated | Mohan | Entropy health test; host benchmark RNG is not representative of the target | Open |
+| A-04 | Keys never cross the MCU–HSM bus in plaintext | Mohan | Protocol monitor / bus trace review | Open |
+| A-05 | Sensor data may be faulty or spoofed; plausibility checks are applied | Sensor interface owner (to be confirmed) | Cross-sensor consistency test | Open |
+| A-06 | The air interface is fully attacker-controlled (eavesdrop, inject, replay, jam) | Rutvika | By design; threat table below | Accepted |
+| A-07 | Receivers reject replayed messages (counter or timestamp) | Rutvika / Deepayan | Replay test case in the message format | Open |
+| A-08 | The ARU–Command Centre link is mutually authenticated | Rutvika / Deepayan | Interface review for ICD v1.1 | Open |
+| A-09 | Keys are rotated before the per-key message limit and on reboot policy | Mohan | Key-rotation test | Open |
+| A-10 | Host-laptop timing is not used as Cortex-M4 timing | Rutvika | Cortex-M4 timing in Renode (pending) | Open |
+
+### 12A.3 Additional Threats (Phase 2)
+
+| Threat ID | STRIDE | Boundary | Threat / Vulnerability | Impact | Mitigation / Related Assumption |
+|-----------|--------|----------|------------------------|--------|---------------------------------|
+| V2X-T-02 | Tampering (also Information Disclosure) | TB-05, TB-06 | **AES-GCM nonce reuse** under the same key (counter lost on reboot, repeated nonce, or random-nonce collision) | Reusing a nonce with the same AES-GCM key compromises security. It can reveal relationships between plaintexts and may enable authentication forgeries, depending on the messages and nonces involved. Treat nonce reuse as a critical security failure. | Persistent counter nonces managed inside the HSM; rotate keys before limits; A-01, A-09 |
+| V2X-S-02 | Spoofing | TB-06 | Replay of a captured valid telemetry message | Receiver accepts stale data as current | Message counter or timestamp, receiver replay window; A-07 |
+| V2X-T-03 | Tampering | TB-05 | Modification of HSM commands or register values on the SPI / I2C / CAN bus | Wrong security configuration or key use | Register protection, bus monitors, authenticated commands; A-02, A-04 |
+| V2X-I-02 | Information Disclosure | TB-05 | Key material or nonce state exposed on the MCU–HSM bus | Key compromise | Keys stay inside the HSM; A-04 |
+| V2X-E-02 | Elevation of Privilege | TB-05 | Unauthorized write to HSM registers (debug access or compromised MCU firmware) | Attacker gains key operations or disables protections | Lock register map after configuration; A-02 |
+| V2X-D-02 | Denial of Service | TB-06 | Radio jamming or flooding of the bus or air interface | Telemetry not delivered | Resilience requirement 7.5; A-06 |
+| V2X-T-04 | Tampering | TB-04 | Spoofed or faulty sensor data enters the ARU | Authenticated but wrong telemetry | Plausibility and cross-sensor checks; A-05 |
+
+### 12A.4 Phase 2 Latency Evidence (host, not Cortex-M4)
+
+Latency figures from the Phase 2 benchmark are **MEASURED on a host laptop** (C, Mbed TLS 3.6.7, gcc -O2) and **MODELED** for V2X airtime. They are not Cortex-M4 timings, and Cortex-M4 latency is pending. AES-GCM adds 28 B per message (12 B nonce + 16 B tag), the overhead that dominates the modeled added delay. [Ref: 03_Phase2_Latency_Model/assumptions.md]
+
+### 12A.5 Review Status
+
+| Reviewer | Scope | Status |
+|----------|-------|--------|
+| K. Mohan Krishna | TB-05, A-01 to A-04, A-09, HSM threats | Pending review (confirmation to be added) |
+| Sensor interface owner | TB-04, A-05, V2X-T-04 | Not yet requested |
 
 # 13. References
 
