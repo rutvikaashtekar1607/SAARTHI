@@ -1,7 +1,0 @@
-op,bytes,inner_calls,repeats,median_us,min_us,p95_us
-AES-128-GCM encrypt,64,5000,30,0.78,0.761,1.136
-AES-128-GCM encrypt,256,5000,30,0.882,0.782,2.313
-AES-128-GCM encrypt,1024,5000,30,0.92,0.897,1.623
-AES-128-GCM encrypt,4096,5000,30,1.309,1.25,1.657
-ECDH P-256 keygen,0,500,30,16.38,14.83,22.129
-ECDH P-256 shared secret,0,500,30,53.298,45.703,72.047
