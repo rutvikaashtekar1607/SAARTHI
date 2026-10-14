@@ -1,0 +1,3 @@
+
+mach create
+machine LoadPlatformDescription @C:/Users/Hp/stm32f4_discovery.repl

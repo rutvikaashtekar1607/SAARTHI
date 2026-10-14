@@ -1,0 +1,7 @@
+operation,payload_bytes,batch_calls,repeats,mean_us,median_us,p99_us,max_us
+AES-128-GCM encryption,64,5000,100,2.383,2.696,3.678,3.757
+AES-128-GCM encryption,256,5000,100,1.421,1.322,2.311,2.613
+AES-128-GCM encryption,1024,5000,100,2.1,1.827,3.87,4.078
+AES-128-GCM encryption,4096,5000,100,3.423,2.98,6.404,10.185
+ECDH P-256 key generation,0,500,100,27.166,22.891,62.63,74.351
+ECDH P-256 shared-secret computation,0,500,100,62.778,60.027,111.878,129.838
