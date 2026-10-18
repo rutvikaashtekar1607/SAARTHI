@@ -499,7 +499,6 @@ Energy consumption was not measured during the completed benchmark runs.
 Therefore, no measured energy value is reported and no feasibility conclusion based on energy consumption is made.
 
 No unsupported performance measurement is presented as a confirmed result.
----
 
 ## 12A. Trust Boundaries and Threat Assumptions v1.1 (Phase 2)
 
@@ -551,7 +550,7 @@ Latency figures from the Phase 2 benchmark are **MEASURED on a host laptop** (C,
 
 | Reviewer | Scope | Status |
 |----------|-------|--------|
-| K. Mohan Krishna | TB-05, A-01 to A-04, A-09, HSM threats | Pending review (confirmation to be added) |
+| K. Mohan Krishna | TB-05, A-01 to A-04, A-09, HSM threats | Reviewed, no changes requested |
 | Sensor interface owner | TB-04, A-05, V2X-T-04 | Not yet requested |
 
 # 13. References
