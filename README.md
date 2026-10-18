@@ -261,7 +261,7 @@ Phase 1 evidence files (`Evidence_01` to `Evidence_06`, `AES-GCM_*`, `ECC_*`) ar
 | Telemetry latency submitted to ICD v1.1 sheet | Completed |
 | Latency numbers posted in the IF-DATA group | Completed |
 | Radio rate and message rates confirmed by Deepayan Das | Confirmed |
-| K. Mohan Krishna review of Section 12A | **Pending** |
+| K. Mohan Krishna review of Section 12A | Reviewed, no changes requested |
 | Cortex-M4 latency | **Pending** |
 
 ---
@@ -292,7 +292,7 @@ Phase 1 evidence files (`Evidence_01` to `Evidence_06`, `AES-GCM_*`, `ECC_*`) ar
 
 ## 🎯 Task Status
 
-**SEC-01 Phase 2 deliverables: COMPLETED, with two items pending (Mohan's review of Section 12A and Cortex-M4 timing).**
+**SEC-01 Phase 2 deliverables: COMPLETED (Cortex-M4 timing pending).**
 
 The documented results are limited to measurements actually obtained and modeled values with stated assumptions.
 
