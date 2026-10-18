@@ -28,7 +28,8 @@ Repository: https://github.com/rutvikaashtekar1607/SAARTHI (paths below are rela
 | 11 | Visuals | `SEC-01 V2X Cryptographic Specification/03_Phase2_Latency_Model/delay_vs_payload.png`, `latency_bar.png`, `trust_boundaries.png` |
 | 12 | STRIDE spec, new Section 12A | `SEC-01 V2X Cryptographic Specification/01_SEC-01_STRIDE_Threat_Model.md` |
 | 13 | This report | `SEC-01 V2X Cryptographic Specification/Phase2_Report.md` |
-| 14 | Screenshot evidence |    `Evidence/Phase2_01_...` to `Evidence/Phase2_06_...`
+| 14 | Screenshot evidence | `Evidence/Phase2_01_Python_Latency_Runs1-2.png` to `Evidence/Phase2_06_Model_Output.png` (full list in `Phase2_README.md`) |
+| 15 | Phase 2 README | `SEC-01 V2X Cryptographic Specification/Phase2_README.md` |
 
 Notes:
 - `results_python.csv` is **superseded** by `results_python_v2.csv` and is not used.
@@ -175,20 +176,19 @@ AES-GCM encrypts by XOR with a keystream $KS$ derived from the key and nonce. If
 
 $$C_1 \oplus C_2 = (P_1 \oplus KS) \oplus (P_2 \oplus KS) = P_1 \oplus P_2$$
 
-This leaks the relationship between the plaintexts and also allows recovery of the GCM authentication key, so an attacker can forge messages. It is recorded as threat V2X-T-02 in Section 12A of the STRIDE spec, with assumptions A-01 and A-09.
+This leaks the relationship between the plaintexts and also can allow recovery, so an attacker can forge messages. It is recorded as threat V2X-T-02 in Section 12A of the STRIDE spec, with assumptions A-01 and A-09.
 
 ---
 
 ## 4. Visual Assets
 
 **Figure 1: Added delay from encryption vs payload (MODELED, 6 Mbps)**
-![Added delay vs payload](SEC-01%20V2X%20Cryptographic%20Specification/03_Phase2_Latency_Model/delay_vs_payload.png)
-
+![Added delay vs payload]03_Phase2_Latency_Model/
 **Figure 2: AES-GCM vs ECDH P-256 latency, log scale (MEASURED, host, C, Mbed TLS 3.6.7)**
-![Latency bar chart](SEC-01%20V2X%20Cryptographic%20Specification/03_Phase2_Latency_Model/latency_bar.png)
+![Latency bar chart]03_Phase2_Latency_Model/
 
 **Figure 3: Trust boundaries TB-04 to TB-07 (STRIDE spec Section 12A)**
-![Trust boundaries](SEC-01%20V2X%20Cryptographic%20Specification/03_Phase2_Latency_Model/trust_boundaries.png)
+![Trust boundaries]03_Phase2_Latency_Model/
 
 Terminal evidence: `Evidence/Phase2_04_C_Latency_Runs.png`, `Evidence/Phase2_05_C_Latency_Runs_2.png`, `Evidence/Phase2_06_Model_Output.png`.
 
@@ -211,7 +211,7 @@ Terminal evidence: `Evidence/Phase2_04_C_Latency_Runs.png`, `Evidence/Phase2_05_
 | Lead | Collaboration | Status |
 |---|---|---|
 | Deepayan Das (Systems Integration) | Confirmed 6 Mbps as the baseline V2X PHY/MAC rate, 10 Hz (100 ms) for standard telemetry, and 20 Hz (50 ms) for high-priority messages | **Confirmed in the team chat, 13 Oct 2026** |
-| K. Mohan Krishna (Hardware Security) | Joint threat assumptions and boundaries: TB-05 (MCU to HSM), A-01 to A-04 and A-09, HSM threats V2X-T-02, T-03, I-02, E-02 | Pending Mohan's review (confirmation to be added) |
+| K. Mohan Krishna (Hardware Security) | Reviewed Section 12A and replied (16 Oct 2026): covers TB-05 and assumptions A-01 to A-04 and A-09. No changes requested. Threat rows V2X-T-02, T-03, I-02 and E-02 not individually confirmed. | **Reviewed** |
 | Smrithi (APM) | Telemetry latency submitted to ICD v1.1 sheet, cell D6 | **Submitted 12 Oct 2026** |
 
 ---
@@ -231,6 +231,5 @@ Terminal evidence: `Evidence/Phase2_04_C_Latency_Runs.png`, `Evidence/Phase2_05_
 | Item | Status |
 |---|---|
 | Cortex-M4 timing | Pending (not part of this milestone) |
-| Mohan review of Section 12A | Pending |
 | Telemetry payload size | To be defined with ICD v1.1 |
 | PHY overhead and decrypt-time assumptions | Unconfirmed assumptions |
