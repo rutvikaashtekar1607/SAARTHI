@@ -1,11 +1,11 @@
-# SAARTHI — SEC-01 Phase 2: Latency Benchmark, V2X Delay Model and Threat Assumptions
+# SAARTHI — SEC-01 Phase 3: End-to-End V2X Encryption Delay, Cortex-M4 Instruction Counts and Zero-Trust Specification
 
 **Project:** SAARTHI
 **Organization:** EduRankAI
 **Owner:** Rutvika Ashtekar
 **Role:** Cybersecurity Lead (Aerospace Security)
 **Domain:** Cryptography & Threat Analysis
-**Task Reference:** SEC-01 Phase 2 (per the SAARTHI Phase 2 1-Week Task Allocation Matrix, 7-day milestone)
+**Task Reference:** SEC-01 Phase 3 (per SAARTHI-SYS-P3-TASK-002, Phase 3 Task Allocation Matrix & Virtual Integration Directive, Days 19 to 25, 7-day milestone)
 **Repository:** https://github.com/rutvikaashtekar1607/SAARTHI
 
 ---
@@ -16,60 +16,68 @@ SAARTHI is an autonomous public-mobility, public-management, and distributed inf
 
 ## 📌 Purpose of This Phase
 
-Phase 1 produced the SEC-01 threat model, STRIDE vectors, and Renode functional builds (code size and static RAM). It did not establish validated latency.
+Phase 2 produced host-laptop latency for AES-GCM and ECDH P-256, a V2X encryption-delay model and the Section 12A threat assumptions. It did not cover ECDSA, Cortex-M4 timing or a zero-trust specification.
 
-The official Phase 2 task is:
+The official Phase 3 task is:
 
-> Benchmark AES-GCM vs ECC latency in Python/C, model V2X radio transmission encryption delay, and co-write STRIDE threat spec.
+> End-to-End V2X Telemetry Encryption Delay Models (AES-GCM / ECC over 6 Mbps / 10 Hz) & STRIDE Zero-Trust Spec.
+
+Work package 12 asks to model the cryptographic processing delay of AES-GCM and ECC over an 802.11p/C-V2X direct channel (6 Mbps PHY rate, 10 Hz / 20 Hz telemetry) "to ensure zero control loop latency degradation." The directive also requires virtual fault injection (power drops, communication cuts).
 
 This phase therefore delivers:
 
-- AES-GCM vs ECC (ECDH P-256) latency benchmarks in **Python and C**.
-- A **V2X radio-transmission encryption-delay model**.
-- A **STRIDE threat-assumption and trust-boundary update** (Section 12A), prepared for joint review with K. Mohan Krishna.
-- Telemetry encryption latency numbers for the **ICD v1.1 (IF-DATA)** interface audit.
-
-For the ECC benchmark, **ECDH using P-256 / secp256r1** is used.
+- **ECDSA P-256** host benchmark (C, Mbed TLS 3.6.7).
+- **Cortex-M4 instruction counts** for AES-GCM, ECDH P-256 and ECDSA P-256 in Renode, with ESTIMATED times.
+- An **end-to-end V2X delay model** for AES-GCM, ECDSA and AES-GCM + ECDSA.
+- A **Zero-Trust specification** (Section 14 of the STRIDE file, ZT-01 to ZT-15).
+- **Fault-injection tests** of the crypto layer (software simulation).
 
 ---
 
 ## 🏷️ Labeling Rule
 
-Every number in Phase 2 is tagged:
+Every number in Phase 3 is tagged:
 
 | Tag | Meaning |
 |---|---|
-| **MEASURED (host)** | Timed on the host laptop with a high-resolution clock |
-| **MODELED** | Calculated from the delay equation and stated assumptions |
-| **ESTIMATED** | Derived from an assumption (none are used as results in this phase) |
+| **MEASURED (host)** | Timed on the host laptop (Intel Core i5-1135G7, Windows 11, C, Mbed TLS 3.6.7) |
+| **MEASURED (Renode)** | Executed-instruction count read in the Renode 1.16.0 STM32F4 emulator. Renode counts instructions, not cycles |
+| **MODELED** | Calculated from the delay equations and the stated assumptions |
+| **ESTIMATED** | Cortex-M4 times derived from Renode instruction counts with an assumed 168 MHz clock and an assumed 1.0 to 2.0 cycles per instruction (CPI) |
 
-⚠️ **All timings are host-laptop timings. They are not Cortex-M4 timings. Cortex-M4 latency is pending.**
+⚠️ **Host timings are not Cortex-M4 timings. Cortex-M4 times in this phase are ESTIMATED, not measured.**
 
 ---
 
 ## 📁 Folder Contents
 
-Paths are relative to the `V2X_Spec_SAARTHI` folder.
+Paths are relative to the `V2X_Spec_SAARTHI` folder. `P3` = `SEC-01 V2X Cryptographic Specification/04_Phase3_E2E_Delay_Model`.
 
 | File / Folder | Purpose |
 |---|---|
-| `SEC-01 V2X Cryptographic Specification/Phase2_Report.md` | Phase 2 report (Sir's 5-section structure + next-task recommendation) |
-| `SEC-01 V2X Cryptographic Specification/Phase2_README.md` | This file |
-| `SEC-01 V2X Cryptographic Specification/01_SEC-01_STRIDE_Threat_Model.md` | Threat model; new Section 12A (Phase 2) |
-| `.../02_Crypto_Benchmark/phase2_latency/bench_c.c` | C benchmark (Mbed TLS 3.6.7) |
-| `.../phase2_latency/results_c.csv`, `results_c_run2.csv`, `results_c_run3.csv` | C results, three runs |
-| `.../phase2_latency/bench_python_v2.py`, `results_python_v2.csv` | Python benchmark, method v2 |
-| `.../phase2_latency/bench_python_v3.py`, `results_python_v3.csv` | Python benchmark, method v3 (100 repeats) |
-| `.../phase2_latency/LATENCY_METHOD.md` | Measurement method |
-| `.../03_Phase2_Latency_Model/v2x_delay_model.py` | V2X delay model script |
-| `.../03_Phase2_Latency_Model/model_output.csv` | Model output |
-| `.../03_Phase2_Latency_Model/assumptions.md` | Model assumptions register |
-| `.../03_Phase2_Latency_Model/delay_vs_payload.png` | Figure: modeled added delay vs payload |
-| `.../03_Phase2_Latency_Model/latency_bar.png` | Figure: AES-GCM vs ECDH latency (log scale) |
-| `.../03_Phase2_Latency_Model/trust_boundaries.png` | Figure: trust boundaries TB-04 to TB-07 |
-| `Evidence/Phase2_*.png` | Phase 2 screenshots |
+| `SEC-01 V2X Cryptographic Specification/Phase3_Report.md` | Phase 3 report (Sir's 5-section structure + next-task recommendation) |
+| `SEC-01 V2X Cryptographic Specification/Phase3_README.md` | This file |
+| `SEC-01 V2X Cryptographic Specification/01_SEC-01_STRIDE_Threat_Model.md` | Threat model; new Section 14 (Zero-Trust Specification, Phase 3) |
+| `P3/bench_ecdsa.c` | ECDSA P-256 host benchmark (C, Mbed TLS 3.6.7) |
+| `P3/results_ecdsa.csv`, `results_ecdsa_run2.csv`, `results_ecdsa_run3.csv` | ECDSA host results, three runs |
+| `P3/e2e_delay_model.py` | End-to-end delay model |
+| `P3/e2e_model_output.csv`, `P3/e2e_setup_output.csv` | Model outputs (per-message and session setup) |
+| `P3/assumptions_phase3.md` | Phase 3 model assumptions |
+| `P3/m4_bench.c`, `config_m4.h`, `linker.ld`, `startup.c` | Cortex-M4 timing firmware |
+| `P3/build_m4.ps1`, `P3/run_m4.resc`, `P3/parse_m4_counts.py` | Build, Renode run and parse scripts |
+| `P3/m4_estimates.csv`, `P3/m4_counts_detail.csv` | Renode instruction counts and estimated times |
+| `P3/fault_tests.py` | Fault-injection tests (software simulation) |
+| `P3/fault_test_results.csv`, `P3/security_event_log.csv` | Fault-test results and event log |
+| `P3/e2e_added_delay.png` | Figure: added delay at 6 Mbps, 64 B payload |
+| `P3/m4_compute_vs_period.png` | Figure: Cortex-M4 compute time vs message periods (log scale) |
+| `03_Phase2_Latency_Model/trust_boundaries.png` | Figure: trust boundaries TB-04 to TB-07 (from Phase 2) |
+| `Evidence/Phase3_*.png` | Phase 3 screenshots |
 
-`results_python.csv` / `bench_python.py` (first Python attempt) are **superseded** by v2 and are not used.
+Notes:
+
+- Phase 2 files (host AES-GCM and ECDH results, `03_Phase2_Latency_Model`) are inputs to this work and were **not changed**.
+- The Phase 1 Renode firmware (`aes_gcm_benchmark.elf`, `ecc_benchmark.elf`) was **not used**. The Cortex-M4 firmware was rebuilt from the source files listed above.
+- Build artifacts (`bench_ecdsa.exe`, object files, `.elf`, `.map`) are excluded from the repository.
 
 ---
 
@@ -77,152 +85,236 @@ Paths are relative to the `V2X_Spec_SAARTHI` folder.
 
 | Item | Used |
 |---|---|
-| Execution environment | Host laptop (not Cortex-M4) |
-| CPU | 11th Gen Intel Core i5-1135G7 @ 2.40 GHz |
-| OS | Windows 11 |
-| C compiler | MSYS2 gcc 16.2.0, `-O2` |
-| C cryptographic library | Mbed TLS 3.6.7 |
-| Python | 3.14.7 |
-| Python cryptographic library | `cryptography` 50.0.2 (OpenSSL backend) |
+| Host CPU | 11th Gen Intel Core i5-1135G7 @ 2.40 GHz |
+| Host OS | Windows 11 |
+| Host build | C, gcc `-O2`, Mbed TLS 3.6.7 |
+| Target architecture | ARM Cortex-M4 / STM32F4 (STM32F407) |
+| Execution environment | Renode 1.16.0 |
+| Cortex-M4 toolchain | Arm GNU Toolchain 12.2.MPACBTI-Rel1 (gcc 12.2.1), `-O2` |
+| Cryptographic library | Mbed TLS 3.6.7 with minimal configuration `config_m4.h` |
+| Firmware size | 29,404 B code (text), 88 B data, 10,872 B bss |
+| Assumed clock | 168 MHz (STM32F407) |
+| Assumed CPI range | 1.0 to 2.0 |
 
 ---
 
-## 🔐 AES-128-GCM Latency (C, Mbed TLS 3.6.7) — MEASURED (host)
+## 🔏 ECDSA P-256 Latency (C, Mbed TLS 3.6.7) — MEASURED (host)
 
 ### Operation
 
-* AES-128-GCM authenticated encryption
-* 128-bit key, 96-bit nonce, 128-bit tag (28 B overhead per message)
-* 5,000 calls per repeat, 15 repeats, 3 saved runs
-
-### Result (median latency per operation, µs)
-
-| Payload | Run 1 | Run 2 | Run 3 | Used in model |
-|---|---:|---:|---:|---:|
-| 64 B | 0.534 | 0.469 | 0.235 | 0.469 |
-| 256 B | 1.413 | 1.272 | 0.751 | 1.272 |
-| 1024 B | 3.110 | 4.675 | 2.695 | 3.110 |
-| 4096 B | 11.335 | 10.994 | 11.093 | 11.093 |
-
-Small payloads (64 B, 256 B) vary by up to 2x between runs because each call takes under a microsecond, so timer resolution and system noise dominate. They are reported as ranges.
-
----
-
-## 🔑 ECDH P-256 Latency (C, Mbed TLS 3.6.7) — MEASURED (host)
-
-### Operation
-
-* ECDH key generation and shared-secret computation, timed separately
-* Curve: P-256 / secp256r1
+* ECDSA P-256 sign and verify, timed separately
 * 100 calls per repeat, 15 repeats, 3 saved runs
+* Correctness check: a valid signature verified and a tampered digest was rejected in all three runs
+* DER signature length: 70 to 71 B
 
 ### Result (median latency per operation, µs)
 
-| Operation | Run 1 | Run 2 | Run 3 | Range |
-|---|---:|---:|---:|---|
-| Key generation | 244.242 | 224.430 | 243.612 | 224 to 244 |
-| Shared secret | 709.591 | 670.224 | 648.928 | 649 to 710 |
+| Operation | Run 1 | Run 2 | Run 3 | Median of runs |
+|---|---:|---:|---:|---:|
+| ECDSA P-256 sign | 263.188 | 262.403 | 263.235 | 263.188 |
+| ECDSA P-256 verify | 868.598 | 906.572 | 890.081 | 890.081 |
+
+AES-GCM and ECDH host results come from Phase 2 (AES-GCM 64 B: 0.469 µs, 256 B: 1.272 µs, 1024 B: 3.110 µs; ECDH key generation 243.612 µs; shared secret 670.224 µs; median of three runs).
 
 ---
 
-## 🐍 Python Latency (OpenSSL backend) — MEASURED (host)
+## 🧮 Cortex-M4 Instruction Counts (Renode) — MEASURED (Renode); times ESTIMATED
 
-| Operation | v2 run 1 | v2 run 2 | v3 (100 repeats) |
-|---|---:|---:|---:|
-| AES-128-GCM, 64 B | 1.052 | 0.780 | 2.696 |
-| AES-128-GCM, 256 B | 0.893 | 0.882 | 1.322 |
-| AES-128-GCM, 1024 B | 0.997 | 0.920 | 1.827 |
-| AES-128-GCM, 4096 B | 1.402 | 1.309 | 2.980 |
-| ECDH P-256 key generation | 16.532 | 16.380 | 22.891 |
-| ECDH P-256 shared secret | 51.255 | 53.298 | 60.027 |
+### Method
 
-Python and C results differ because they use **different library implementations** (OpenSSL vs Mbed TLS). This is not a language comparison. The delay model uses the C numbers.
+* Each operation runs once as warm-up and five times between start and end markers.
+* Renode hooks read the executed-instruction count at each marker.
+* The run finished with `bench_done = 1`, `bench_status = 0` and **70 markers** captured.
+* Estimate: `t = N × CPI / f`, with `f` = 168 MHz and CPI between 1.0 and 2.0.
+
+### Result
+
+| Operation | Bytes | Median instructions (min to max) | Est. time, CPI 1.0 | Est. time, CPI 2.0 |
+|---|---|---|---:|---:|
+| AES-128-GCM encrypt | 64 | 9,138 (9,138 to 9,144) | 0.054 ms | 0.109 ms |
+| AES-128-GCM encrypt | 256 | 30,438 (30,438 to 30,444) | 0.181 ms | 0.362 ms |
+| AES-128-GCM encrypt | 1024 | 115,638 (115,638 to 115,644) | 0.688 ms | 1.377 ms |
+| ECDH P-256 key generation | n/a | 4,712,615 (4,698,804 to 4,720,414) | 28.051 ms | 56.103 ms |
+| ECDH P-256 shared secret | n/a | 13,169,923 (13,164,342 to 13,186,541) | 78.392 ms | 156.785 ms |
+| ECDSA P-256 sign | 32 (digest) | 6,230,018 (6,223,693 to 6,237,141) | 37.083 ms | 74.167 ms |
+| ECDSA P-256 verify | 32 (digest) | 20,848,784 (20,848,784 to 20,848,787) | 124.100 ms | 248.200 ms |
+
+The conclusions below hold at both CPI values.
 
 ---
 
-## 📡 V2X Encryption-Delay Model — MODELED
+## 📡 End-to-End V2X Delay Model — MODELED
 
-### Equation
+### Equations
 
 ```text
-T_total = T_enc + T_air + T_prop + T_dec
+T_total = T_tx + T_air + T_prop + T_rx
 T_air   = T_phy + 8 (L + O) / R
-ΔT      = T_enc + T_dec + 8 O / R
+ΔT      = T_total - (T_phy + 8 L / R + T_prop)
+T_setup = 2 (T_keygen + T_sign + T_verify + T_shared) + 2 (T_air(H) + T_prop),  H = 65 + 64 + id bytes
+t       = N × CPI / f,   f = 168 MHz,   CPI in [1.0, 2.0]
 ```
 
 ### Inputs
 
 | Parameter | Value | Source |
 |---|---|---|
-| Radio rate R | 6 Mbps | Confirmed by Deepayan Das (baseline V2X PHY/MAC rate) |
-| Message rate | 10 Hz (100 ms) standard; 20 Hz (50 ms) high-priority | Confirmed by Deepayan Das |
-| PHY overhead T_phy | 40 µs | Assumption M-02 (unconfirmed) |
-| Propagation T_prop | 1 µs | Assumption M-03 (about 300 m) |
-| AES-GCM overhead O | 28 B | 12 B nonce + 16 B tag |
-| Decrypt time T_dec | equal to T_enc | Assumption M-05 (unconfirmed) |
-| T_enc | C results above (median of runs) | MEASURED (host) |
+| PHY rate R | 6 Mbps | Confirmed by Deepayan Das; stated in the Phase 3 directive |
+| Message rates | 10 Hz (100 ms) and 20 Hz (50 ms) | Phase 3 directive |
+| PHY overhead T_phy | 40 µs | Assumption (802.11p 10 MHz); does not apply to C-V2X PC5 framing |
+| Propagation T_prop | 1 µs | Assumption (about 300 m) |
+| Decrypt time | T_dec = T_enc | Assumption |
+| Telemetry payload | 64 B base case; 256 B and 1024 B sensitivity | Author's assumption from the state vector x_ARU (Adarsh Anurag left such assumptions to the author) |
+| AES-GCM overhead O | 28 B (12 B nonce + 16 B tag) | AES-GCM format |
+| ECDSA overhead O | 64 B signature + signer id (8 B digest or 130 B certificate) | Assumptions, to verify against IEEE 1609.2 |
 
-### Result
+### Result A: host crypto times (MEASURED), airtime MODELED, 64 B payload
 
-| Payload | T_enc (MEASURED) | Added delay from encryption | Total one-way delay | Added delay, % of 100 ms | Added delay, % of 50 ms |
-|---|---:|---:|---:|---:|---:|
-| 64 B | 0.469 µs | 38.271 µs | 164.605 µs | 0.038% | 0.077% |
-| 256 B | 1.272 µs | 39.877 µs | 422.211 µs | 0.040% | 0.080% |
-| 1024 B | 3.110 µs | 43.553 µs | 1449.887 µs | 0.044% | 0.087% |
-| 4096 B | 11.093 µs | 59.519 µs | 5561.853 µs | 0.060% | 0.119% |
+Baseline unsecured total: 126.333 µs.
+
+| Path | Signer id | Added delay | Total one-way | % of 100 ms (10 Hz) | % of 50 ms (20 Hz) |
+|---|---|---:|---:|---:|---:|
+| AES-GCM | n/a | 38.271 µs | 164.605 µs | 0.165% | 0.329% |
+| ECDSA | 8 B digest | 1249.269 µs | 1375.602 µs | 1.376% | 2.751% |
+| AES-GCM + ECDSA | 8 B digest | 1287.540 µs | 1413.874 µs | 1.414% | 2.828% |
+| ECDSA | 130 B cert | 1411.936 µs | 1538.269 µs | 1.538% | 3.077% |
+| AES-GCM + ECDSA | 130 B cert | 1450.207 µs | 1576.540 µs | 1.577% | 3.153% |
+
+### Result B: Cortex-M4 crypto times (ESTIMATED), airtime MODELED, 64 B payload (low = CPI 1.0, high = CPI 2.0)
+
+| Path | Signer id | Total, low | Total, high | % of 100 ms | % of 50 ms | Fits period? |
+|---|---|---:|---:|---|---|---|
+| AES-GCM | n/a | 0.272 ms | 0.381 ms | 0.27% to 0.38% | 0.54% to 0.76% | **Yes** |
+| ECDSA | 8 B digest | 161.4 ms | 322.6 ms | 161% to 323% | 323% to 645% | **No** |
+| AES-GCM + ECDSA | 8 B digest | 161.6 ms | 322.8 ms | 162% to 323% | 323% to 646% | **No** |
+| ECDSA | 130 B cert | 161.6 ms | 322.8 ms | 162% to 323% | 323% to 646% | **No** |
+| AES-GCM + ECDSA | 130 B cert | 161.7 ms | 323.0 ms | 162% to 323% | 323% to 646% | **No** |
+
+### Result C: authenticated session setup (ECDH + ECDSA on both handshake messages)
+
+| Case | 8 B digest | 130 B certificate |
+|---|---:|---:|
+| Host (MEASURED crypto) | 4.58 ms | 4.91 ms |
+| Cortex-M4 (ESTIMATED), CPI 1.0 | 535.7 ms | 536.0 ms |
+| Cortex-M4 (ESTIMATED), CPI 2.0 | 1071.0 ms | 1071.3 ms |
+
+### Result D: compute load per message period on the Cortex-M4 (ESTIMATED)
+
+| Operation | At 10 Hz (100 ms) | At 20 Hz (50 ms) |
+|---|---|---|
+| AES-GCM, 64 B | 0.05% to 0.11% | 0.11% to 0.22% |
+| ECDSA sign | 37% to 74% | 74% to 148% |
+| ECDSA verify | 124% to 248% | 248% to 496% |
+
+Results for 256 B and 1024 B payloads are in `e2e_model_output.csv`.
 
 ### Key findings
 
-* Encryption adds **38 to 60 µs** per message (MODELED, 6 Mbps), under **0.12%** of the message period even at 20 Hz.
-* About **37.3 µs** of the added delay is airtime for the extra 28 B. At 1024 B that is **86%** of the added delay.
-* ECDH P-256 is a key-agreement step, not a per-message cost, so it is excluded from the per-message delay.
-* The 4096 B row is larger than a typical V2X frame, so it is an extrapolation.
+* The **AES-GCM path** (per-message protection after an authenticated session) fits both the 10 Hz and 20 Hz periods on the Cortex-M4 (ESTIMATED).
+* **Software ECDSA P-256 per message does not fit** either period at 168 MHz, even at the optimistic 1.0 cycles per instruction. This applies to a generic C build of Mbed TLS; optimized or hardware-accelerated ECC could be much faster and was not measured.
+* Recommended architecture (a design recommendation, not a measured result): **ECDH + AES-GCM sessions for unicast links**, and **HSM or hardware ECDSA (or a selective-verification policy) for broadcast safety messages**.
 
 ---
 
-## 🧪 Test Run: Delay Model Output
+## ✅ Pass Criteria for "Zero Control-Loop Latency Degradation"
 
-Command run in `03_Phase2_Latency_Model`:
+"Zero" cannot be proven in general, so the author defined the criteria below. The FreeRTOS schedule used is the one provided by Rakshita Lakkanna B.: GNC 10 ms (priority 4), Sensing 20 ms (priority 3), Communications 50 ms (priority 2), Telemetry 100 ms (priority 1).
 
-```text
-PS ...\03_Phase2_Latency_Model> python .\v2x_delay_model.py
-payload_B,t_enc_us_MEASURED,airtime_plain_us_MODEL,airtime_enc_us_MODEL,delta_us_MODEL,total_us_MODEL
-64,0.469,125.333,162.667,38.271,164.605
-256,1.272,381.333,418.667,39.877,422.211
-1024,3.11,1405.333,1442.667,43.553,1449.887
-4096,11.093,5501.333,5538.667,59.519,5561.853
-
-Saved delay_vs_payload.png and latency_bar.png
-```
-
-Result: **PASS** (script ran without errors, reproduced `model_output.csv`, and regenerated both charts). The output matches the model table above.
-
-Supporting screenshot:
-
-```text
-Evidence/Phase2_06_Model_Output.png
-```
+| # | Criterion | Result |
+|---|---|---|
+| C1 | Crypto runs below GNC and Sensing priority and holds no shared lock | Design requirement ZT-10; **not yet verified** |
+| C2 | Crypto compute plus airtime fits inside the message period | AES-GCM: **met** (host and Cortex-M4). Software ECDSA: **not met** on the Cortex-M4 |
+| C3 | Per-operation compute load stays under 100% of the period | AES-GCM: met. ECDSA sign: 37% to 148%. ECDSA verify: 124% to 496%, **not met** |
+| C4 | Interference from Sensing and Communications tasks included | **Not included**: their execution times are not yet measured |
 
 ---
 
-## 🛡️ STRIDE Threat Specification Update (Section 12A)
+## 🛡️ Zero-Trust Specification (Section 14 of the STRIDE file)
 
-Section 12A of `01_SEC-01_STRIDE_Threat_Model.md` adds component-level trust boundaries, threat assumptions, and new threats. Earlier threat IDs are unchanged.
+Section 14 extends the STRIDE analysis (Sections 5, 6 and 12A) for the ARU (Autonomous Roadside Unit) with five principles: no implicit trust, verify explicitly, least privilege, assume breach and fail closed, short-lived secrets.
 
-### Trust boundaries
+### Link-type decision
 
-| ID | Boundary | Trust level | Owner |
+| Link | Pattern |
+|---|---|
+| ARU to Command Centre (unicast, TB-07) | Mutually authenticated ECDH + ECDSA session, then per-message AES-128-GCM with counter nonces. Public-key cost is paid once per session |
+| ARU broadcast (TB-06) | Per-message sender authentication required, because a shared symmetric key cannot show which key holder sent a message. The path is an **open decision** (ZT-12) |
+
+### Requirements ZT-01 to ZT-15
+
+| ID | Requirement (summary) | Status |
+|---|---|---|
+| ZT-01 | Authenticate every message crossing TB-06 and TB-07; drop and log failures | Verified in software simulation |
+| ZT-02 | Never trust a message by apparent sender address or radio source | Verified in software simulation |
+| ZT-03 | Unicast sessions start with mutually authenticated ECDH + ECDSA, outside control-loop tasks | Open (setup time ESTIMATED 0.54 to 1.07 s) |
+| ZT-04 | Never reuse an AES-GCM nonce; counter survives power loss and reboot | Verified in software simulation; HSM counter to be confirmed (Mohan) |
+| ZT-05 | Reject replays; last accepted counter survives reboot | Verified in software simulation |
+| ZT-06 | Rotate keys before counter or NIST SP 800-38D limits and on a policy interval | Open (interval to be set) |
+| ZT-07 | Keys generated and stored in the HSM, never in plaintext on the MCU-HSM bus | Open (Mohan) |
+| ZT-08 | HSM register map locked after configuration; debug disabled | Open (Mohan) |
+| ZT-09 | Fail closed: drop, raise a security event, no unauthenticated fallback | Verified in software simulation (drop and log); safe state not tested |
+| ZT-10 | Crypto task below GNC (4) and Sensing (3), no shared lock | Pending (assumption; needs FreeRTOS trace) |
+| ZT-11 | Per-message crypto compute under the message period | Evidence available: AES-GCM meets it; software ECDSA does not |
+| ZT-12 | Broadcast messages use hardware or HSM-assisted ECDSA, or a documented selective-verification policy | Open decision |
+| ZT-13 | Sensor inputs untrusted until plausibility-checked; defined safe state | Open |
+| ZT-14 | Security events logged with a monotonic counter persisted across reboot | Verified in software simulation |
+| ZT-15 | Cheap pre-checks and rate limits before expensive verification | Verified in software simulation (AES-GCM path only) |
+
+"Verified in software simulation" means protocol logic only. It does not cover the HSM hardware, the radio or real flash behaviour.
+
+---
+
+## 🧪 Test Runs
+
+### Cortex-M4 Renode run
+
+| Check | Result |
+|---|---|
+| Firmware build (Arm GNU 12.2.MPACBTI-Rel1, Mbed TLS 3.6.7, `-O2`) | Completed |
+| `bench_done` | 1 |
+| `bench_status` | 0 |
+| Markers captured | 70 |
+| Operations measured | 7 operations × 5 repeats |
+
+Renode hook used in `run_m4.resc`:
+
+```text
+$addr = `sysbus GetSymbolAddress "bench_marker"`
+sysbus AddWatchpointHook $addr DoubleWord Write "import sys; sys.marks.append((value, cpu.ExecutedInstructions))"
+emulation RunFor "00:00:08"
+```
+
+Firmware writes `(op_id << 8) | 1` before and `(op_id << 8) | 2` after each operation; the count for an operation is the difference between its end and start marker.
+
+### Fault-injection tests (`fault_tests.py`, software simulation)
+
+Result: **9 of 9 tests PASS**, and **3 of 3 negative controls** showed the expected weakness.
+
+| Test | Fault injected | Requirement | Result |
 |---|---|---|---|
-| TB-04 | Sensors → ARU MCU | Semi-trusted | Sensor interface owner (to be confirmed) |
-| TB-05 | ARU MCU → HSM (SPI / I2C / CAN) | Trusted endpoints, untrusted bus | K. Mohan Krishna |
-| TB-06 | ARU → V2X radio / air interface | Untrusted | Rutvika Ashtekar |
-| TB-07 | ARU → Command Centre | Authenticated link assumed (A-08) | Rutvika Ashtekar / Deepayan Das |
+| T1 | None (20 valid messages) | ZT-01 | PASS, 20 of 20 accepted |
+| T2 | Flipped ciphertext, tag and nonce bits | ZT-01, ZT-09 | PASS, 3 of 3 rejected |
+| T3 | Wrong key, unknown sender, forged high counter | ZT-01, ZT-02, ZT-09 | PASS, receiver state not advanced |
+| T4 | Replay of newest, middle and oldest message | ZT-05 | PASS, 3 of 3 rejected without decryption |
+| T5 | 200 sender power drops at random points | ZT-04 | PASS, 22,841 nonces, 0 duplicates |
+| T6 | 20 lost messages, a late old message, receiver reboot | ZT-05, ZT-09 | PASS |
+| T7 | Counter rolled back | ZT-04 | PASS, send blocked |
+| T8 | 700 replays or unknown senders, 300 forgeries | ZT-15 | PASS, 0 decryptions for the 700; forgeries capped at 50 attempts |
+| T9 | Event-log counter across reboot | ZT-14 | PASS, monotonic |
+| T5c, T6c, T7c | Volatile counters and nonce reuse (controls) | ZT-04, ZT-05 | Weakness shown: 20,689 nonce reuses; replay accepted after reboot; plaintext relation leaked |
 
-### Assumptions and threats
+Nonce counter with write-ahead reservation:
 
-* Assumptions **A-01 to A-10**, each with an owner and a way to validate it (for example nonce never reused per key, HSM register map write-protected, RNG validated, replay rejection, key rotation).
-* New threats: **V2X-T-02** (AES-GCM nonce reuse), **V2X-S-02** (replay), **V2X-T-03**, **V2X-I-02**, **V2X-E-02** (HSM bus and register threats), **V2X-D-02** (jamming), **V2X-T-04** (spoofed or faulty sensor data).
-* Nonce reuse under one key is treated as a critical failure: it reveals the XOR of two plaintexts and can enable forgery.
+```python
+if persistent:
+    self.counter = nvm.get("reserved", 0)     # resume at the reserved value
+    self.limit = self.counter + BLOCK
+    nvm["reserved"] = self.limit              # persist BEFORE using the block
+```
+
+After a power drop the sender resumes at the persisted reservation, skipping unused values, so a nonce is never reused.
+
+Scope: this tests protocol logic in software, with a Python dictionary standing in for non-volatile memory.
 
 ---
 
@@ -236,16 +328,16 @@ Evidence/
 
 | Evidence File | Evidence |
 |---|---|
-| `Phase2_01_Python_Latency_Runs1-2.png` | Python benchmark, two runs (v2) |
-| `Phase2_02_Host_CPU_Info.png` | Host CPU identification |
-| `Phase2_02b_Python_Method_And_Scripts.png` | Python method and scripts |
-| `Phase2_03_ICD_Sheet_Submission.png` | Submission to the ICD v1.1 data-collection sheet |
-| `Phase2_03b_Python_Benchmark_V3.png` | Python benchmark v3 |
-| `Phase2_04_C_Latency_Runs.png` | C benchmark run |
-| `Phase2_05_C_Latency_Runs_2.png` | C benchmark run (continued) |
-| `Phase2_06_Model_Output.png` | V2X delay model output |
+| `Phase3_01_ECDSA_Host_Runs.png` | ECDSA P-256 host benchmark runs |
+| `Phase3_02_E2E_Model_Output.png` | End-to-end delay model output (host crypto times) |
+| `Phase3_03_M4_Build.png` | Cortex-M4 firmware build |
+| `Phase3_04_Renode_Run.png` | Renode run of the Cortex-M4 benchmark |
+| `Phase3_05_M4_Counts.png` | Cortex-M4 instruction counts |
+| `Phase3_06_E2E_Model_M4.png` | End-to-end model output (Cortex-M4 ESTIMATED times) |
+| `Phase3_07_ZeroTrust_Spec.png` | Zero-Trust specification, Section 14 |
+| `Phase3_08_Fault_Tests.png` | Fault-injection test results |
 
-Phase 1 evidence files (`Evidence_01` to `Evidence_06`, `AES-GCM_*`, `ECC_*`) are unchanged.
+Phase 1 and Phase 2 evidence files are unchanged.
 
 ---
 
@@ -253,48 +345,54 @@ Phase 1 evidence files (`Evidence_01` to `Evidence_06`, `AES-GCM_*`, `ECC_*`) ar
 
 | Check | Status |
 |---|---|
-| Python AES-GCM and ECDH latency (v2, 2 runs; v3) | Completed |
-| C AES-GCM and ECDH latency (3 runs, Mbed TLS 3.6.7) | Completed |
-| V2X delay model script run | PASS |
-| Model charts regenerated | Completed |
-| STRIDE Section 12A written | Completed |
-| Telemetry latency submitted to ICD v1.1 sheet | Completed |
-| Latency numbers posted in the IF-DATA group | Completed |
-| Radio rate and message rates confirmed by Deepayan Das | Confirmed |
-| K. Mohan Krishna review of Section 12A | Reviewed, no changes requested |
-| Cortex-M4 latency | **Pending** |
+| ECDSA P-256 host benchmark (3 runs, correctness check) | Completed |
+| Cortex-M4 firmware rebuilt from source (Phase 1 firmware not reused) | Completed |
+| Renode run: `bench_done = 1`, `bench_status = 0`, 70 markers | Completed |
+| End-to-end delay model (AES-GCM, ECDSA, AES-GCM + ECDSA; session setup) | Completed |
+| Zero-Trust specification ZT-01 to ZT-15 | Completed |
+| Fault-injection tests (software simulation) | 9 of 9 PASS |
+| Negative controls | 3 of 3 showed the expected weakness |
+| Requirements verified in software simulation | ZT-01, 02, 04, 05, 09, 14, 15 |
+| 6 Mbps rate and 10 Hz / 20 Hz message rates | Confirmed (Deepayan Das; Phase 3 directive) |
+| FreeRTOS task periods and priorities (Rakshita Lakkanna B.) | Confirmed |
+| Sensing and Communications execution times; crypto-task WCET | **Pending (not measured)** |
+| K. Mohan Krishna review of Phase 3 HSM items (ZT-04, 06, 07, 08, 12) | **Pending** |
+| Smrithi: format and location for Phase 3 IF-DATA submission | **Pending** |
+| Technical review (Adarsh Anurag, Deepayan Das) | **Pending** |
+| Executive sign-off (Siddharth Prasad) | **Pending** |
 
 ---
 
 ## ⚠️ Measurement Limits
 
-* All crypto timings are **host-laptop timings**. A Cortex-M4 will be slower. Do not use them as embedded timing budgets.
-* The PHY overhead (40 µs) and the decrypt-equals-encrypt assumption are mine and have not been confirmed by a reviewer.
-* The model ignores the MAC header, SERVICE and tail bits, and OFDM symbol rounding (assumption M-07).
-* The telemetry payload size is not yet defined, so results are given for four payload sizes.
-* One 1024 B run shows an outlier (4.675 µs); its minimum matches the other runs, so it is treated as system noise and kept in the data.
-* An earlier pair of C runs was overwritten; only the three runs above are backed by saved files.
-* Energy consumption was **not measured**.
-* Phase 1 Renode functional results were **not re-verified** in Phase 2.
-* AES-GCM (authenticated encryption) and ECDH P-256 (key agreement) perform different functions and are not substitutes.
+* Cortex-M4 times are **ESTIMATED** from Renode instruction counts. Renode is instruction-accurate, not cycle-accurate, and does not model flash wait states. The 168 MHz clock and the CPI range of 1.0 to 2.0 are assumptions.
+* Instruction counts depend on compiler and library version and apply to the build described above.
+* The firmware uses a **non-secure test random generator**, for timing only. The real entropy source (assumption A-03) is not tested.
+* The 40 µs PHY overhead is an 802.11p assumption and does not apply to C-V2X (PC5) framing. The 64 B signature and the signer-identity sizes are assumptions to verify against IEEE 1609.2.
+* The 64 B telemetry payload is the author's assumption; it is not an agreed value.
+* The fault-injection tests simulate protocol logic in software. They do not test the HSM hardware, the radio or real flash behaviour.
+* Execution times of the Sensing and Communications tasks, and the WCET of a crypto task under load, are not available.
+* The optimized or hardware-accelerated ECC case was not measured.
+* Phase 1 Renode results were not re-verified and were not used.
 
 ---
 
 ## 🎯 Next-Task Recommendation
 
-1. Cortex-M4 timing in Renode (cycle counts for AES-GCM and ECDH P-256), then replace the host values in the model.
-2. ECDSA P-256 sign/verify benchmark (host in C, then Cortex-M4).
-3. HSM-offloaded AES-GCM with Mohan's HSM state machine.
-4. Nonce-management and key-rotation test with Mohan's HSM FSM.
-5. Validate the model once the telemetry payload size is defined in ICD v1.1.
+1. HSM or hardware ECDSA offload with Mohan's HSM: measure sign and verify latency including SPI / I2C / CAN transfer, and decide the broadcast authentication path (ZT-12).
+2. Crypto-task WCET and jitter under FreeRTOS load in Renode with Rakshita, replacing the ESTIMATED values and closing criteria C1 and C4.
+3. Optimized ECC measurement: repeat the Cortex-M4 count with an optimized P-256 implementation.
+4. HSM nonce-counter persistence test across reboot and power loss (ZT-04, A-01).
+5. Agree the telemetry payload size and key-rotation interval (ZT-06) with Adarsh and Mohan, and update the model.
+6. Phase 4 hardware: cycle counts from the DWT counter on real STM32F4 hardware, replacing the CPI assumption.
 
 ---
 
 ## 🎯 Task Status
 
-**SEC-01 Phase 2 deliverables: COMPLETED (Cortex-M4 timing pending).**
+**SEC-01 Phase 3 deliverables: PREPARED. Technical review and executive sign-off are pending.**
 
-The documented results are limited to measurements actually obtained and modeled values with stated assumptions.
+The documented results are limited to measurements actually obtained, ESTIMATED values with stated assumptions, and software-simulation test results.
 
 ---
 
@@ -307,8 +405,9 @@ The documented results are limited to measurements actually obtained and modeled
 | Owner | Rutvika Ashtekar |
 | Role | Cybersecurity Lead (Aerospace Security) |
 | Domain | Cryptography & Threat Analysis |
-| Task | SEC-01 Phase 2: AES-GCM vs ECC latency (Python/C), V2X encryption-delay model, STRIDE threat spec |
-| Deliverable | Latency benchmarks + delay model + threat assumptions and trust boundaries + report |
-| Assigned deadline (Phase 2) | 7 Days |
+| Task | SEC-01 Phase 3: End-to-End V2X Telemetry Encryption Delay Models (AES-GCM / ECC over 6 Mbps / 10 Hz) & STRIDE Zero-Trust Spec |
+| Deliverable | ECDSA benchmark + Cortex-M4 instruction counts + end-to-end delay model + Zero-Trust specification + fault-injection tests + report |
+| Assigned deadline (Phase 3) | 7 Days |
+| Document reference | SAARTHI-SYS-P3-TASK-002 |
 
-⚠️ **Note:** Host timings are not Cortex-M4 timings. Values marked MODELED depend on stated assumptions. No unverified claim is presented as a confirmed result.
+⚠️ **Note:** Host timings are not Cortex-M4 timings. Cortex-M4 times are ESTIMATED. Values marked MODELED depend on stated assumptions. "Verified in software simulation" covers protocol logic only. No unverified claim is presented as a confirmed result.
