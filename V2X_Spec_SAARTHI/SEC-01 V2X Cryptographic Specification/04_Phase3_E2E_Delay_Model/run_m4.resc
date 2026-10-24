@@ -1,0 +1,15 @@
+using sysbus
+mach create "m4"
+machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
+python "import sys; sys.marks = []"
+sysbus LoadELF @C:/SAARTHI_M4/m4_bench.elf
+$addr = `sysbus GetSymbolAddress "bench_marker"`
+sysbus AddWatchpointHook $addr DoubleWord Write "import sys; sys.marks.append((value, cpu.ExecutedInstructions))"
+emulation RunFor "00:00:08"
+echo "bench_done (expect 1):"
+sysbus ReadDoubleWord `sysbus GetSymbolAddress "bench_done"`
+echo "bench_status (expect 0):"
+sysbus ReadDoubleWord `sysbus GetSymbolAddress "bench_status"`
+python "import sys; print 'markers captured (expect 71):', len(sys.marks)"
+python "import sys; f = open('C:/SAARTHI_M4/m4_counts_raw.csv', 'w'); f.write('value,instr' + chr(10)); [f.write('%d,%d' % m + chr(10)) for m in sys.marks]; f.close()"
+echo "Saved C:/SAARTHI_M4/m4_counts_raw.csv"

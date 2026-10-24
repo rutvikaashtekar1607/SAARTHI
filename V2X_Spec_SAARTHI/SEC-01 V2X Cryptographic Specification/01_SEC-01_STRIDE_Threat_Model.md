@@ -502,7 +502,7 @@ No unsupported performance measurement is presented as a confirmed result.
 
 ## 12A. Trust Boundaries and Threat Assumptions v1.1 (Phase 2)
 
-This section extends Section 4 with component-level trust boundaries, explicit threat assumptions, and new threats found during Phase 2. It does not change the earlier threat IDs. Prepared by Rutvika Ashtekar for joint review with K. Mohan Krishna (hardware security, HSM); review status is in Section 12A.5. **ARU** means Autonomous Roadside Unit, as used in the Phase 2 task allocation.
+This section extends Section 4 with component-level trust boundaries, explicit threat assumptions, and new threats found during Phase 2. It does not change the earlier threat IDs. Prepared by Rutvika Ashtekar for joint review with K. Mohan Krishna (hardware security, HSM); review status is in Section 12A.5. **ARU** means Autonomous Roadside Unit, as defined in the Phase 3 task allocation (SAARTHI-SYS-P3-TASK-002).
 
 ### 12A.1 Component-Level Trust Boundaries
 
@@ -511,7 +511,7 @@ This section extends Section 4 with component-level trust boundaries, explicit t
 | TB-04 | Sensors → ARU MCU | Sensor readings enter the MCU | Semi-trusted: sensors may fail or be spoofed | Sensor interface owner (to be confirmed) |
 | TB-05 | ARU MCU → HSM (SPI / I2C / CAN) | Commands, nonces, key handles, register accesses | Trusted endpoints, **untrusted bus** | Mohan |
 | TB-06 | ARU → V2X radio / air interface | Encrypted telemetry over the air | **Untrusted**: attacker can eavesdrop, inject, replay, jam | Rutvika |
-| TB-07 | ARU → Command Centre | Telemetry, status and commands | Authenticated link assumed (see A-08) | Rutvika / Deepayan |
+| TB-07 | ARU → Command Centre | Telemetry, status and commands | Authenticated link assumed (see A-08) | Rutvika (Deepayan to confirm) |
 
 TB-06 refines TB-01 and TB-03 from Section 4.
 
@@ -525,8 +525,8 @@ TB-06 refines TB-01 and TB-03 from Section 4.
 | A-04 | Keys never cross the MCU–HSM bus in plaintext | Mohan | Protocol monitor / bus trace review | Open |
 | A-05 | Sensor data may be faulty or spoofed; plausibility checks are applied | Sensor interface owner (to be confirmed) | Cross-sensor consistency test | Open |
 | A-06 | The air interface is fully attacker-controlled (eavesdrop, inject, replay, jam) | Rutvika | By design; threat table below | Accepted |
-| A-07 | Receivers reject replayed messages (counter or timestamp) | Rutvika / Deepayan | Replay test case in the message format | Open |
-| A-08 | The ARU–Command Centre link is mutually authenticated | Rutvika / Deepayan | Interface review for ICD v1.1 | Open |
+| A-07 | Receivers reject replayed messages (counter or timestamp) | Rutvika (Deepayan to confirm) | Replay test case in the message format | Open |
+| A-08 | The ARU–Command Centre link is mutually authenticated | Rutvika (Deepayan to confirm) | Interface review for ICD v1.1 | Open |
 | A-09 | Keys are rotated before the per-key message limit and on reboot policy | Mohan | Key-rotation test | Open |
 | A-10 | Host-laptop timing is not used as Cortex-M4 timing | Rutvika | Cortex-M4 timing in Renode (pending) | Open |
 
@@ -590,3 +590,75 @@ Latency figures from the Phase 2 benchmark are **MEASURED on a host laptop** (C,
 [17] Arm Limited, “Arm GNU Toolchain for embedded 32-bit RISC processors.”
 
 [18] STMicroelectronics, “STM32F407/417 — Arm Cortex-M4 32-bit MCU.”
+
+
+---
+
+# 14. Zero-Trust Specification v1.0 (Phase 3)
+
+## 14.1 Purpose and Scope
+
+This section extends the STRIDE analysis (Sections 5, 6 and 12A) with a zero-trust specification for the ARU: the MCU, the HSM, the V2X radio link (TB-06) and the Command Centre link (TB-07). It uses the Phase 3 latency results in `04_Phase3_E2E_Delay_Model/`. Requirements below are specified. The Status column shows which have evidence; "verified in software simulation" means protocol logic only, not HSM hardware, radio or flash.
+
+Label rule: crypto times are **MEASURED (host)**; Cortex-M4 times are **ESTIMATED** (Renode instruction counts, 168 MHz, 1.0 to 2.0 cycles per instruction); airtime figures are **MODELED**.
+
+## 14.2 Zero-Trust Principles
+
+| ID | Principle |
+|----|-----------|
+| P1 | No implicit trust: network location, radio range or a known sender address never grants trust. |
+| P2 | Verify explicitly: every message and command is authenticated at every trust boundary before use. |
+| P3 | Least privilege: each component gets only the keys and registers it needs. |
+| P4 | Assume breach, fail closed: on failure the ARU drops the message and raises a security event; it never falls back to unauthenticated operation. |
+| P5 | Short-lived secrets: keys are rotated and never leave the HSM in plaintext. |
+
+## 14.3 Link-Type Decision
+
+| Link | Pattern | Why |
+|------|---------|-----|
+| ARU to Command Centre (unicast, TB-07) | Mutually authenticated session (ECDH P-256 key agreement, ECDSA P-256 signatures on the handshake), then per-message AES-128-GCM with counter nonces | Only two parties share the key, so a valid tag identifies the peer. Public-key cost is paid once per session. |
+| ARU broadcast to vehicles and infrastructure (TB-06) | Per-message sender authentication required | A shared symmetric key cannot prove which key holder sent a message, so any holder could forge it. |
+
+**Measured consequence for broadcast:** software ECDSA P-256 on the Cortex-M4 is not viable per message (see ZT-11). The implementation path (HSM or hardware offload, or a selective-verification policy) is an **open decision** (ZT-12). Whether broadcast safety messages need confidentiality, or only authentication, is a policy question to confirm against IEEE 1609.2.
+
+## 14.4 Requirements
+
+| ID | Requirement (shall) | Addresses | Boundary | Verification | Status |
+|----|---------------------|-----------|----------|--------------|--------|
+| ZT-01 | Every message crossing TB-06 or TB-07 is authenticated before processing; failures are dropped and logged. | V2X-S-01, V2X-T-01 | TB-06, TB-07 | Fault-injection T2, T3 | Verified in software simulation |
+| ZT-02 | A message is never trusted because of its apparent sender address or radio source. | V2X-S-01 | TB-06 | Fault-injection T3 | Verified in software simulation |
+| ZT-03 | Unicast sessions start with mutually authenticated ECDH + ECDSA before any telemetry. Setup runs outside control-loop tasks. ESTIMATED M4 setup time is 0.54 to 1.07 s. | V2X-S-01, V2X-I-01 | TB-07 | Phase 3 model; handshake test | Open |
+| ZT-04 | An AES-GCM nonce is never reused under one key. The nonce counter survives power loss and reboot; if it cannot be proven, the device rekeys before sending. | V2X-T-02 (A-01) | TB-05, TB-06 | Fault-injection T5, T7; HSM counter review (Mohan) | Verified in software simulation; HSM counter to be confirmed (Mohan) |
+| ZT-05 | Receivers reject replayed messages using a per-sender counter; the last accepted counter survives a reboot (non-volatile), so replays are still rejected after a restart. | V2X-S-02 (A-07) | TB-06 | Fault-injection T4, T6 | Verified in software simulation |
+| ZT-06 | Keys are rotated before the nonce counter space or the NIST SP 800-38D invocation limit is reached, and on a defined policy interval (value to be set with Mohan). | V2X-T-02 (A-09) | TB-05 | Rekey test (HSM FSM) | Open |
+| ZT-07 | Private and session keys are generated and stored in the HSM and never cross the MCU-HSM bus in plaintext. | V2X-I-02 (A-04) | TB-05 | Bus monitor / SVA (Mohan) | Open |
+| ZT-08 | The HSM register map is locked after configuration; debug access is disabled in operation. | V2X-E-02, V2X-T-03 (A-02) | TB-05 | SVA locked-access assertions (Mohan) | Open |
+| ZT-09 | On authentication failure, nonce-state loss or HSM error, the ARU drops the message, raises a security event, and does not fall back to unauthenticated operation. The control loop's safe state without telemetry is defined by the GNC owner. | V2X-T-01 | TB-05, TB-06 | Fault-injection T2, T3 | Verified in software simulation (drop and log); safe state not tested |
+| ZT-10 | Crypto processing runs in a task with lower priority than GNC (4) and Sensing (3), and holds no shared lock or interrupt mask while computing. | zero control-loop degradation (A-10) | MCU | Renode task trace (Rakshita) | Pending (assumption) |
+| ZT-11 | Per-message crypto compute on the target MCU stays under the message period (100 ms at 10 Hz, 50 ms at 20 Hz). **AES-GCM meets this** (ESTIMATED 0.05 to 0.11 ms per 64 B operation). **Software ECDSA P-256 does not** (ESTIMATED sign 37 to 74 ms, verify 124 to 248 ms). | V2X-D-02 | MCU | Renode instruction counts; `e2e_model_output.csv` | Evidence available |
+| ZT-12 | Broadcast safety messages use per-message sender authentication through hardware or HSM-assisted ECDSA, or a documented selective-verification policy. | V2X-S-01, V2X-S-02 | TB-06 | Decision, then Renode or HSM timing | **Open decision** |
+| ZT-13 | Sensor inputs are untrusted until plausibility-checked; a sensor blackout leads to a defined safe state. | V2X-T-04 (A-05) | TB-04 | Sensor fault-injection (Pranav) | Open |
+| ZT-14 | Security events (authentication failure, replay reject, counter anomaly, rekey) are logged with a monotonic counter that is persisted across reboot. | V2X-R-01 | all | Fault-injection T9 | Verified in software simulation |
+| ZT-15 | Cheap pre-checks (sender ID, counter, rate limit) run before expensive signature verification, because one verify costs ESTIMATED 124 to 248 ms and an attacker could otherwise exhaust the CPU. | V2X-D-02 | TB-06 | Fault-injection T8 (flood test) | Verified in software simulation (AES-GCM path only; ECDSA path not simulated) |
+
+## 14.5 STRIDE Coverage
+
+| STRIDE | Threat IDs | Requirements |
+|--------|-----------|--------------|
+| Spoofing | V2X-S-01, V2X-S-02 | ZT-01, 02, 03, 05, 12 |
+| Tampering | V2X-T-01 to T-04 | ZT-01, 04, 08, 09, 13 |
+| Repudiation | V2X-R-01 | ZT-14 |
+| Information Disclosure | V2X-I-01, V2X-I-02 | ZT-03, 07 |
+| Denial of Service | V2X-D-01, V2X-D-02 | ZT-10, 11, 15 |
+| Elevation of Privilege | V2X-E-01, V2X-E-02 | ZT-07, 08 |
+
+## 14.6 Open Items
+
+| Item | Owner |
+|------|-------|
+| Does the HSM keep a persistent nonce counter across reboot (ZT-04)? | Mohan |
+| Broadcast authentication path (ZT-12) | Mohan, Deepayan |
+| Message priority vs task priority for the 20 Hz messages | Rakshita, Adarsh |
+| Key-rotation interval (ZT-06) | Rutvika, Mohan |
+| Sensor safe state (ZT-13) | Pranav, Adarsh |
+| Crypto-task WCET and jitter under load (ZT-10) | Rakshita (unmeasured) |

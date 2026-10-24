@@ -1,0 +1,3 @@
+op,bytes,inner_calls,repeats,median_us,median_ms,min_us
+ECDSA P-256 sign,32,100,15,263.235,0.263235,254.587
+ECDSA P-256 verify,32,100,15,890.081,0.890081,848.827

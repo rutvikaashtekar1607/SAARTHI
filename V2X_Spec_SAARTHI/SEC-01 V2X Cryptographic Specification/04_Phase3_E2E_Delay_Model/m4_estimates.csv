@@ -1,0 +1,8 @@
+op,bytes,instr_count
+AES-128-GCM encrypt,64,9138
+AES-128-GCM encrypt,256,30438
+AES-128-GCM encrypt,1024,115638
+ECDH P-256 keygen,0,4712615
+ECDH P-256 shared secret,0,13169923
+ECDSA P-256 sign,32,6230018
+ECDSA P-256 verify,32,20848784

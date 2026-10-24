@@ -1,0 +1,13 @@
+test,kind,requirement,result,detail
+T1 valid messages accepted,TEST,ZT-01,PASS,20 of 20 accepted
+T2 tampered messages rejected,TEST,"ZT-01, ZT-09",PASS,3 of 3 tampered rejected; later valid message accepted
+T3 wrong-key and spoofed sender rejected,TEST,"ZT-01, ZT-02, ZT-09",PASS,forged (wrong key) and unknown sender rejected; receiver state not advanced by forgery
+T4 replayed messages rejected,TEST,ZT-05,PASS,3 of 3 replays rejected without decryption
+T5 sender power drops: nonce never reused,TEST,ZT-04,PASS,"200 power cycles, 22841 nonces issued, 0 duplicates (persistent write-ahead counter)"
+T5c volatile counter (negative control),CONTROL,ZT-04,WEAKNESS SHOWN (expected),20689 nonce reuses after power drops: shows why the counter must be persistent
+T6 communication cut and receiver reboot,TEST,"ZT-05, ZT-09",PASS,30 of 30 delivered accepted across the gap; late old message rejected; replay after reboot rejected; traffic resumes
+T6c volatile receiver state (negative control),CONTROL,ZT-05,WEAKNESS SHOWN (expected),replay accepted after a reboot when counters are not persistent
+T7c nonce reuse leaks plaintext relation (control),CONTROL,ZT-04,WEAKNESS SHOWN (expected),C1 xor C2 equals P1 xor P2 when a nonce is reused
+T7 sender refuses to reuse a nonce,TEST,ZT-04,PASS,counter rollback detected and send blocked
+T8 flood: pre-checks and rate limit before expensive verification,TEST,"ZT-15, ZT-11",PASS,700 replays or unknown senders cost 0 decryptions; 300 forgeries capped at 50 authentication attempts; real traffic resumed
+T9 security events logged with a monotonic counter,TEST,ZT-14,PASS,1094 events across all tests
