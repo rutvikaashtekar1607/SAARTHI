@@ -12,7 +12,7 @@
 
 ## 1. Deliverables and GitHub Paths
 
-Repository: <<GitHub URL>>
+Repository:  https://rutvikaashtekar1607.github.io/SAARTHI/
 
 All paths are relative to the repository folder `V2X_Spec_SAARTHI`. `P3` = `SEC-01 V2X Cryptographic Specification/04_Phase3_E2E_Delay_Model`.
 
