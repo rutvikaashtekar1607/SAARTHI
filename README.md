@@ -357,9 +357,6 @@ Phase 1 and Phase 2 evidence files are unchanged.
 | FreeRTOS task periods and priorities (Rakshita Lakkanna B.) | Confirmed |
 | Sensing and Communications execution times; crypto-task WCET | **Pending (not measured)** |
 | K. Mohan Krishna review of Phase 3 HSM items (ZT-04, 06, 07, 08, 12) | **Pending** |
-| Smrithi: format and location for Phase 3 IF-DATA submission | **Pending** |
-| Technical review (Adarsh Anurag, Deepayan Das) | **Pending** |
-| Executive sign-off (Siddharth Prasad) | **Pending** |
 
 ---
 
@@ -411,3 +408,33 @@ The documented results are limited to measurements actually obtained, ESTIMATED 
 | Document reference | SAARTHI-SYS-P3-TASK-002 |
 
 ⚠️ **Note:** Host timings are not Cortex-M4 timings. Cortex-M4 times are ESTIMATED. Values marked MODELED depend on stated assumptions. "Verified in software simulation" covers protocol logic only. No unverified claim is presented as a confirmed result.
+
+---
+
+## 🏁 Concluding Note: Internship Handover (SEC-01 Phase 3)
+
+This section closes the Phase 3 README. Everything above is unchanged. It records the final state of the SEC-01 work at the end of my internship (28 October 2026) so that the next owner can continue without guesswork.
+
+### Final status
+
+| Item | Status at handover |
+|---|---|
+| SEC-01 Phase 3 deliverables | **PREPARED** (benchmark, Cortex-M4 counts, delay model, Zero-Trust spec, fault tests, report) |
+| Cortex-M4 timing | **ESTIMATED** from Renode instruction counts; not measured on hardware |
+| Fault-injection tests | 9 of 9 PASS in software simulation; not tested on HSM hardware, radio or real flash |
+
+### Main conclusion of SEC-01
+
+- AES-GCM per-message protection fits both the 10 Hz and 20 Hz message periods on the Cortex-M4 (ESTIMATED).
+- Software ECDSA P-256 per message does **not** fit either period, even at 1.0 cycles per instruction (verify ESTIMATED at 124 to 248 ms against a 100 ms period).
+- Recommended design (a design recommendation, not a measured result): ECDH + AES-GCM sessions for unicast links; HSM or hardware-assisted ECDSA, or a documented selective-verification policy, for broadcast safety messages (ZT-12, open decision).
+
+### Where to find everything
+
+- Repository: https://github.com/rutvikaashtekar1607/SAARTHI
+- Project site: https://rutvikaashtekar1607.github.io/SAARTHI/
+- Complete internship handover (project involvement report, key contributions and all files): https://drive.google.com/drive/folders/1HATq1fFNpeKsob59gDgXteqF0qw_UCxV?usp=sharing
+
+### Contributor
+
+Rutvika Ashtekar, Cybersecurity Lead (Aerospace Security), EduRankAI. Internship concluded 28 October 2026.
