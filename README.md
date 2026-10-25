@@ -433,7 +433,6 @@ This section closes the Phase 3 README. Everything above is unchanged. It record
 
 - Repository: https://github.com/rutvikaashtekar1607/SAARTHI
 - Project site: https://rutvikaashtekar1607.github.io/SAARTHI/
-- Complete internship handover (project involvement report, key contributions and all files): https://drive.google.com/drive/folders/1HATq1fFNpeKsob59gDgXteqF0qw_UCxV?usp=sharing
 
 ### Contributor
 
